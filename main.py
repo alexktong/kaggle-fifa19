@@ -4,46 +4,42 @@ import numpy as np
 import pulp as p
 import pandas as pd
 
-input_file='archive.zip'
-
-
-# create position category
-def position_category(row):
-
-    if row == 'GK':
-        position = 'goalkeeper'
-    elif row in ['RB', 'RWB']:
-        position = 'right_back'
-    elif row in ['LB', 'LWB']:
-        position = 'left_back'
-    elif 'CB' in row:
-        position = 'center_back'
-    elif row in ['RM', 'RW']:
-        position = 'right_wing'
-    elif row in ['LM', 'LW']:
-        position = 'left_wing'
-    elif any([pos in row for pos in ['AM', 'CM', 'DM']]):
-        position = 'center_mid'
-    else:
-        position = 'forward'
-
-    return position
-
-
-# denotes players' market value in dollar term
-def value_in_dollar(value):
-
-    return float(value[1:-1]) * 1000
-
 
 class OptimalTeam:
-    def __init__(self, input_file):
 
-        self.input_file = input_file
+    # create position category
+    @staticmethod
+    def position_category(row):
+
+        if row == 'GK':
+            position = 'goalkeeper'
+        elif row in ['RB', 'RWB']:
+            position = 'right_back'
+        elif row in ['LB', 'LWB']:
+            position = 'left_back'
+        elif 'CB' in row:
+            position = 'center_back'
+        elif row in ['RM', 'RW']:
+            position = 'right_wing'
+        elif row in ['LM', 'LW']:
+            position = 'left_wing'
+        elif any([pos in row for pos in ['AM', 'CM', 'DM']]):
+            position = 'center_mid'
+        else:
+            position = 'forward'
+
+        return position
+
+    # denotes players' market value in dollar term
+    @staticmethod
+    def value_in_dollar(value):
+        return float(value[1:-1]) * 1000
+
+    def __init__(self):
 
         columns = ['Name', 'Age', 'Club', 'Wage', 'Overall', 'Potential', 'Position']
 
-        self.df = pd.read_csv(self.input_file, usecols=columns)
+        self.df = pd.read_csv('archive.zip', usecols=columns)
 
         # remove rows with missing values
         self.df = self.df.dropna()
@@ -52,10 +48,10 @@ class OptimalTeam:
         self.df.columns = [column.lower().replace(' ', '_') for column in self.df.columns]
 
         # denotes wage in dollar term
-        self.df['wage_dollar'] = self.df['wage'].apply(lambda row: value_in_dollar(row))
+        self.df['wage_dollar'] = self.df['wage'].apply(lambda row: self.value_in_dollar(row))
 
         # create position category
-        self.df['position_category'] = self.df['position'].apply(lambda row: position_category(row))
+        self.df['position_category'] = self.df['position'].apply(lambda row: self.position_category(row))
 
     def maximise_overall(self, max_wage):
 
