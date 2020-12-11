@@ -1,4 +1,4 @@
-# What attributes drive player's value
+# Maximise overall rating of team constrained by wage budget and playing style
 
 import numpy as np
 import pulp as p
