@@ -1,4 +1,4 @@
 # kaggle-fifa19
-Python script that optimises the overall rating of a Fifa 19 team given constraints using linear programming module **pulp**. 
+Using Python linear programming module **pulp**, I maximise the overall rating of a Fifa 19 team contrained by wage budget and playing style. 
 
-Presented in Jupyter Notebook.
+A walkthrough of my application is presented in Jupyter Notebook.
